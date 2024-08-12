@@ -1,51 +1,26 @@
 import unittest
-import os
 from database.sqlite_database import SQLiteDatabase
+from unittest.mock import MagicMock
 
 class TestSQLiteDatabase(unittest.TestCase):
-
     def setUp(self):
-        # Use an in-memory SQLite database for testing
-        self.db = SQLiteDatabase(':memory:')
+        self.db = SQLiteDatabase(':memory:', 'test_security')
+        self.db.security = 'test_security'  # Set the table name to a placeholder for in-memory
 
     def test_table_creation(self):
-        # Check that the table was created
         cursor = self.db.conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='price_data';")
-        self.assertEqual(cursor.fetchone()[0], 'price_data')
+        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{self.db.security}';")
+        self.assertEqual(cursor.fetchone()[0], self.db.security)
 
     def test_store_price_data(self):
-        # Mock data to insert into the database
-        mock_data = [{
-            'open_time': '2021-06-30 19:00:00',
-            'close_time': '2021-06-30 19:01:00',
-            'open_epoch': 1625097600000,
-            'close_epoch': 1625097660000,
-            'open': 35000.00,
-            'high': 36000.00,
-            'low': 34000.00,
-            'close': 35500.00,
-            'volume': 100.0,
-            'price_change_percent': 1.4286,
-            'direction': 'up'
-        }]
-        self.db.store_price_data(mock_data, 'ETHUSDT')
-
-        # Verify that the data was inserted
+        mock_data = [
+            {'datetime': '2024-08-11T00:00:00Z', 'open': 1.0, 'high': 2.0, 'low': 0.5, 'close': 1.5, 'volume': 100},
+            {'datetime': '2024-08-11T00:01:00Z', 'open': 1.5, 'high': 2.5, 'low': 1.0, 'close': 2.0, 'volume': 150}
+        ]
+        self.db.store_data(mock_data)
         cursor = self.db.conn.cursor()
-        cursor.execute("SELECT * FROM price_data WHERE coin_pair='ETHUSDT';")
-        result = cursor.fetchone()
-
-        self.assertIsNotNone(result)
-        self.assertEqual(result[1], 'ETHUSDT')
-        self.assertEqual(result[5], 1625097660000)
-        self.assertEqual(result[9], 35500.00)
-        self.assertEqual(result[12], 'up')
-
-
-    def tearDown(self):
-        # Close the database connection
-        self.db.close()
+        cursor.execute(f"SELECT COUNT(*) FROM {self.db.security}")
+        self.assertEqual(cursor.fetchone()[0], 2)
 
 if __name__ == '__main__':
     unittest.main()

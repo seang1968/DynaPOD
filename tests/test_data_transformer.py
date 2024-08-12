@@ -6,7 +6,6 @@ class TestDataTransformer(unittest.TestCase):
 
     def setUp(self):
         self.config = Configuration('config/pairs.xml')
-        # Pass the pair name 'ETHUSDT' to DataTransformer
         self.transformer = DataTransformer(self.config, 'ETHUSDT')
 
     def test_empty_data(self):

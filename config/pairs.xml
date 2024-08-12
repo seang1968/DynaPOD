@@ -14,10 +14,17 @@
         </pair>
         <pair name="DOGEUSDT">
             <setting name="time_frame" type="string" value="1m" />
-            <setting name="limit" type="integer" value="1440" />
+            <setting name="limit" type="integer" value="1000" />
             <setting name="db_file" type="string" value="DOGEUSDT.db" />
             <setting name="timezone" type="string" value="America/New_York" />
         </pair>
-        <!-- Add more pairs as needed -->
+
+        <pair name="1INCHUSDT">
+            <setting name="time_frame" type="string" value="1m" />
+            <setting name="limit" type="integer" value="1000" />
+            <setting name="db_file" type="string" value="1INCHUSDT.db" />
+            <setting name="timezone" type="string" value="America/New_York" />
+        </pair>
     </pairs>
+
 </config>

@@ -32,6 +32,24 @@ class BinanceDataSource:
             print(f"Error fetching data: {response.status_code} - {response.text}")
             return None
 
+    def fetch_minute_data_since(self, since_timestamp, limit):
+        """Fetch minute data starting from the given timestamp."""
+        base_url = "https://api.binance.com"
+        endpoint = f"/api/v3/klines"
+        params = {
+            "symbol": self.coin_pair,
+            "interval": self.time_frame,
+            "startTime": int(since_timestamp) * 1000,
+            "limit": limit
+        }
+        
+        response = requests.get(base_url + endpoint, params=params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error fetching data: {response.status_code} - {response.text}")
+            return None
+
     def pair_exists(self):
         base_url = "https://api.binance.com"
         endpoint = f"/api/v3/exchangeInfo"
