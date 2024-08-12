@@ -3,15 +3,17 @@ import pytz
 from datetime import datetime
 
 class BinanceDataSource:
-    def __init__(self, config, pair_name):
-        self.config = config
-        self.coin_pair = pair_name
-        self.time_frame = config.get(pair_name, 'time_frame')
-        self.limit = config.get(pair_name, 'limit')
-        self.timezone = pytz.timezone(config.get(pair_name, 'timezone'))
+    def __init__(self, config=None, pair_name=None):
+        if config and pair_name:
+            self.config = config
+            self.coin_pair = pair_name
+            self.time_frame = config.get(pair_name, 'time_frame')
+            self.limit = config.get(pair_name, 'limit')
+            self.timezone = pytz.timezone(config.get(pair_name, 'timezone'))
+        elif pair_name:
+            self.coin_pair = pair_name
 
     def fetch_minute_data(self, limit=None):
-        # If a limit is provided, use it; otherwise, use the default limit from config
         if limit is None:
             limit = self.limit
         
@@ -29,3 +31,18 @@ class BinanceDataSource:
         else:
             print(f"Error fetching data: {response.status_code} - {response.text}")
             return None
+
+    def pair_exists(self):
+        base_url = "https://api.binance.com"
+        endpoint = f"/api/v3/exchangeInfo"
+        
+        response = requests.get(base_url + endpoint)
+        if response.status_code == 200:
+            exchange_info = response.json()
+            for symbol in exchange_info['symbols']:
+                if symbol['symbol'] == self.coin_pair:
+                    return True
+            return False
+        else:
+            print(f"Error fetching exchange info: {response.status_code} - {response.text}")
+            return False
