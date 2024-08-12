@@ -13,8 +13,19 @@ class DataIngestionManager:
         self.db = SQLiteDatabase(security)
         self.transformer = DataTransformer(self.config, self.security)
 
-    def run(self):
-        raw_data = self.data_source.fetch_minute_data()
+    def run(self, limit=None):
+        # If limit is provided, use it; otherwise, get it from the configuration
+        if limit is None:
+            limit = int(self.config.get(self.security, 'limit'))
+
+        # Fetch data from the data source with the specified limit
+        raw_data = self.data_source.fetch_minute_data(limit)
+        
+        # Transform the data
         transformed_data = self.transformer.transform(raw_data)
+        
+        # Store the data in the database
         self.db.store_price_data(transformed_data, self.security)
+        
+        # Close the database connection
         self.db.close()

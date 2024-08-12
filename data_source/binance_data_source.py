@@ -10,13 +10,17 @@ class BinanceDataSource:
         self.limit = config.get(pair_name, 'limit')
         self.timezone = pytz.timezone(config.get(pair_name, 'timezone'))
 
-    def fetch_minute_data(self):
+    def fetch_minute_data(self, limit=None):
+        # If a limit is provided, use it; otherwise, use the default limit from config
+        if limit is None:
+            limit = self.limit
+        
         base_url = "https://api.binance.com"
         endpoint = f"/api/v3/klines"
         params = {
             "symbol": self.coin_pair,
             "interval": self.time_frame,
-            "limit": self.limit
+            "limit": limit
         }
         
         response = requests.get(base_url + endpoint, params=params)
