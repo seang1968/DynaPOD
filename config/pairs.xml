@@ -1,0 +1,17 @@
+<config>
+    <pairs>
+        <pair name="ETHUSDT">
+            <setting name="time_frame" type="string" value="1m" />
+            <setting name="limit" type="integer" value="10" />
+            <setting name="db_file" type="string" value="ETHUSDT.db" />
+            <setting name="timezone" type="string" value="America/Chicago" />
+        </pair>
+        <pair name="BTCUSDT">
+            <setting name="time_frame" type="string" value="1m" />
+            <setting name="limit" type="integer" value="10" />
+            <setting name="db_file" type="string" value="BTCUSDT.db" />
+            <setting name="timezone" type="string" value="America/New_York" />
+        </pair>
+        <!-- Add more pairs as needed -->
+    </pairs>
+</config>

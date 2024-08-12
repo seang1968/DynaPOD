@@ -1,0 +1,6 @@
+<config>
+    <setting name="coin_pair" type="string" value="ETHUSDT" />
+    <setting name="time_frame" type="string" value="1m" />
+    <setting name="limit" type="integer" value="10" />
+    <setting name="timezone" type="string" value="America/Chicago" />
+</config>
