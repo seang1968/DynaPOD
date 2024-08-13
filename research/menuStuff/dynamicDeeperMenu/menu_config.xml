@@ -1,0 +1,49 @@
+<!-- menu_config.xml -->
+
+<menu>
+    <item name="File Operations">
+        <help>Operations related to file handling.</help>
+        <submenu>
+            <item name="Open File">
+                <param name="file" default="default.txt" type="str"/>
+                <param name="mode" default="r" type="str"/>
+                <help>Opens a file with the given name and mode.</help>
+            </item>
+            <item name="Save File">
+                <param name="file" default="output.txt" type="str"/>
+                <help>Saves the file with the given name.</help>
+            </item>
+        </submenu>
+    </item>
+    <item name="Settings">
+        <help>Settings for the application.</help>
+        <submenu>
+            <item name="Display Settings">
+                <help>Adjust display-related settings.</help>
+                <submenu>
+                    <item name="Change Resolution">
+                        <param name="resolution" default="1920x1080" type="str"/>
+                        <help>Changes the display resolution.</help>
+                    </item>
+                    <item name="Advanced Display Settings">
+                        <help>Advanced options for display settings.</help>
+                        <submenu>
+                            <item name="Color Calibration">
+                                <param name="calibration_value" default="default" type="str"/>
+                                <help>Calibrates the display colors.</help>
+                            </item>
+                            <item name="Brightness Control">
+                                <param name="level" default="50" type="int"/>
+                                <help>Controls the brightness level.</help>
+                            </item>
+                        </submenu>
+                    </item>
+                </submenu>
+            </item>
+            <item name="Set Default File Name">
+                <param name="filename" default="default.txt" type="str"/>
+                <help>Sets the default file name used in file operations.</help>
+            </item>
+        </submenu>
+    </item>
+</menu>

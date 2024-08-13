@@ -1,3 +1,4 @@
+#configuration.py
 import datetime
 import json
 import xml.etree.ElementTree as ET
@@ -24,8 +25,8 @@ class Configuration:
     def load(self):
         """Load settings from the XML configuration file."""
         try:
-            tree = ET.parse(self.filename)
-            root = tree.getroot()
+            self.tree = ET.parse(self.filename)  # Save the tree as an instance attribute
+            root = self.tree.getroot()
 
             # Check if the config is for multiple pairs
             pairs = root.find('pairs')
@@ -95,7 +96,16 @@ class Configuration:
             del self.settings[name]
         else:
             raise KeyError(f"Setting '{name}' not found")
-
+        
+    def delete_pair(self, pair_name):
+        root = self.tree.getroot()
+        for pair in root.findall('pair'):
+            if pair.get('name') == pair_name:
+                root.remove(pair)
+                self.tree.write(self.filename)  # Save changes back to the file
+                return True
+        return False
+    
     def save(self):
         """Save the settings back to the XML configuration file."""
         root = ET.Element("config")

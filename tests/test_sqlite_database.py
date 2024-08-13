@@ -1,3 +1,4 @@
+#test_sqlite_database.py
 import unittest
 from database.sqlite_database import SQLiteDatabase
 from unittest.mock import MagicMock
@@ -14,8 +15,8 @@ class TestSQLiteDatabase(unittest.TestCase):
 
     def test_store_price_data(self):
         mock_data = [
-            {'datetime': '2024-08-11T00:00:00Z', 'open': 1.0, 'high': 2.0, 'low': 0.5, 'close': 1.5, 'volume': 100},
-            {'datetime': '2024-08-11T00:01:00Z', 'open': 1.5, 'high': 2.5, 'low': 1.0, 'close': 2.0, 'volume': 150}
+            {'open_time': '2024-08-11T00:00:00Z', 'open': 1.0, 'high': 2.0, 'low': 0.5, 'close': 1.5, 'volume': 100},
+            {'open_time': '2024-08-11T00:01:00Z', 'open': 1.5, 'high': 2.5, 'low': 1.0, 'close': 2.0, 'volume': 150}
         ]
         self.db.store_data(mock_data)
         cursor = self.db.conn.cursor()

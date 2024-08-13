@@ -25,6 +25,6 @@
             <setting name="db_file" type="string" value="1INCHUSDT.db" />
             <setting name="timezone" type="string" value="America/New_York" />
         </pair>
-    </pairs>
+    <pair name="HOOKUSDT"><setting name="time_frame" type="string" value="1m" /><setting name="limit" type="integer" value="1000" /><setting name="db_file" type="string" value="HOOKUSDT.db" /><setting name="timezone" type="string" value="America/New_York" /></pair></pairs>
 
 </config>

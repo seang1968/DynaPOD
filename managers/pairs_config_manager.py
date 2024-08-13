@@ -1,3 +1,4 @@
+#pairs_config_manager.py
 import xml.etree.ElementTree as ET
 from data_source.binance_data_source import BinanceDataSource
 from config.configuration import Configuration
@@ -35,13 +36,16 @@ class PairsConfigManager:
             pairs_element.append(new_pair)  # Append new pair inside the <pairs> tag
             tree.write(self.config_file)
             print(f"Added {pair_name} to {self.config_file}")
+            return True
         else:
             print(f"{pair_name} already exists in {self.config_file}")
+            return True
 
     def check_and_add_pair(self, pair_name: str):
         data_source = BinanceDataSource(pair_name=pair_name)
         if data_source.pair_exists():
             print(f"The pair {pair_name} is available on Binance.")
-            self.add_pair_to_config(pair_name)
+            return self.add_pair_to_config(pair_name)
         else:
             print(f"The pair {pair_name} is NOT available on Binance.")
+            return False
