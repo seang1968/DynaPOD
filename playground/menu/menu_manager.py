@@ -1,5 +1,6 @@
 import os
-import json  # Required to handle list and map parameters
+import json
+import keyboard  # Import the keyboard library
 from menu.menu_parser import MenuParser
 from operations.operation_manager import OperationManager
 
@@ -8,57 +9,72 @@ class MenuManager:
         self.menu_parser = MenuParser(xml_file)  # Initialize the parser with the XML file
         self.menu_structure = self.menu_parser.get_menu_structure()  # Get the parsed menu structure
         self.operation_manager = OperationManager()  # Initialize the operation manager
+        self.exit_to_main_menu = False  # Flag to track if the user wants to exit to the main menu
+
+        # Set up a global keyboard listener for Ctrl+C to exit to the main menu
+        keyboard.add_hotkey('ctrl+c', self.trigger_exit_to_main_menu)
+
+    def trigger_exit_to_main_menu(self):
+        print("\nKeyboard shortcut detected. Returning to the main menu...")
+        self.exit_to_main_menu = True
 
     def clear_terminal(self):
-        # Clears the terminal screen for a cleaner display
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def display_menu(self, current_menu=None, level=1, parent_name="Main Menu", parent_help=None):
-        current_menu = current_menu or self.menu_structure  # Use the main menu structure if no submenu is provided
+        current_menu = current_menu or self.menu_structure
 
         while True:
-            # Set help text for the main menu or any submenu
+            # If exit to main menu is triggered, break out of the loop
+            if self.exit_to_main_menu:
+                self.exit_to_main_menu = False  # Reset the flag
+                return "main_menu"  # Return a signal to go back to the main menu
+
             if level == 1:
-                parent_help = "This is the main menu of the application."  # Set the help text for the main menu
+                parent_help = "This is the main menu of the application."
             elif parent_help is None:
                 parent_help = current_menu.get('help', '')
 
-            self.clear_terminal()  # Clear the terminal before showing the menu
-            self.show_menu(parent_name, parent_help, current_menu, level)  # Show the menu with the help text
+            self.clear_terminal()
+            self.show_menu(parent_name, parent_help, current_menu, level)
 
             try:
-                choice = int(input("Please choose an option: ")) - 1  # Get user choice
+                choice = int(input("Please choose an option: ")) - 1
                 if choice == len(current_menu):
                     if level == 1:
                         return  # Exit the main menu loop
                     else:
-                        return  # Go back to the previous menu
+                        return
                 
                 selected_item = list(current_menu.keys())[choice]
                 submenu = current_menu[selected_item].get('submenu')
                 selected_help = current_menu[selected_item].get('help', '')
                 
                 if submenu:
-                    # If it's a submenu, display the menu name and help text before diving deeper
-                    self.display_menu(submenu, level + 1, selected_item, selected_help)  # Recursively display deeper submenus
+                    result = self.display_menu(submenu, level + 1, selected_item, selected_help)
+                    if result == "main_menu":
+                        return "main_menu"  # Return to the main menu
                 else:
                     self.execute_action(selected_item, current_menu[selected_item])
+
+            except KeyboardInterrupt:
+                print("\nReturning to the main menu...")
+                return "main_menu"  # Signal to return to the main menu
+
             except (IndexError, ValueError):
-                print("Invalid choice. Please try again.")  # Handle invalid input gracefully
+                print("Invalid choice. Please try again.")
 
     def show_menu(self, name, help_text, menu, level):
-        """Display the menu with the provided name and help text."""
-        print(f"{name}")  # Display the name of the current menu
+        print(f"{name}")
         if help_text:
-            print(f"Help: {help_text}")  # Display the help text for the current menu
+            print(f"Help: {help_text}")
 
-        print("\n" + ">" * (level - 1) + f" {name}:")  # Display the menu level with the specific name
-        # Enumerate through menu items
+        print("\n" + ">" * (level - 1) + f" {name}:")
         item_keys = [key for key in menu.keys() if isinstance(menu[key], dict)]
         for index, menu_item in enumerate(item_keys):
             details = menu[menu_item]
             help_text = details.get('help', '')
-            print(f"{index + 1}. {menu_item} - {help_text}")  # Show each menu item with its help text
+            print(f"{index + 1}. {menu_item} - {help_text}")
         print(f"{len(item_keys) + 1}. Back to Previous Menu" if level > 1 else f"{len(item_keys) + 1}. Exit")
 
     def execute_action(self, operation_name, subitem):
@@ -66,12 +82,11 @@ class MenuManager:
         help_text = subitem.get('help')
 
         if help_text:
-            print(f"\nHelp: {help_text}")  # Display help text before executing the action
+            print(f"\nHelp: {help_text}")
 
         param_values = {}
         for param_name, param_info in params.items():
             value = input(f"Enter {param_name} (default: {param_info['default']}): ") or param_info['default']
-            # Type casting based on the 'type' attribute
             if param_info['type'] == 'int':
                 try:
                     value = int(value)
@@ -102,7 +117,6 @@ class MenuManager:
                 except ValueError:
                     print(f"Invalid input for {param_name}. Expected a map. Using default value.")
                     value = json.loads(param_info['default'])
-            # For 'str', no casting is needed
             param_values[param_name] = value
 
-        self.operation_manager.execute_operation(operation_name, param_values)  # Execute the operation with parameters
+        self.operation_manager.execute_operation(operation_name, param_values)
