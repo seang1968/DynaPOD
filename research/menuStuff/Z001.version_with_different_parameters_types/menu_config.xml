@@ -1,0 +1,78 @@
+<!-- menu_config.xml -->
+<!--
+    This XML file defines the structure of the dynamic menu system.
+    Each <menu> or <item> represents a menu option, which may contain parameters, help text, and nested submenus.
+    This file can be modified to add, remove, or change menu options without changing the codebase.
+-->
+
+<menu name="Main Menu">
+    <help>Main Menu of the application.</help>
+    <item name="File Operations">
+        <help>Operations related to file handling.</help>
+        <submenu>
+            <menu name="2nd level menu">
+                <help>This is the 2nd level menu.</help>
+                <submenu>
+                    <item name="Submenu Option 1">
+                        <param name="param1" default="default1" type="str"/>
+                        <help>Performs an action with param1.</help>
+                    </item>
+                    <menu name="Third Level Menu">
+                        <help>This is the third level menu.</help>
+                        <submenu>
+                            <item name="Submenu Option 1">
+                                <param name="param1" default="default1" type="str"/>
+                                <help>Performs an action with param1.</help>
+                            </item>
+                            <menu name="Fourth Level Menu">
+                                <help>This is the fourth level menu.</help>
+                                <submenu>
+                                    <item name="Submenu Option 1">
+                                        <param name="param1" default="default1" type="str"/>
+                                        <help>Performs an action with param1.</help>
+                                    </item>
+                                    <item name="Submenu Option 2">
+                                        <param name="param2" default="default2" type="str"/>
+                                        <help>Performs an action with param2.</help>
+                                    </item>
+                                </submenu>
+                            </menu>
+                            <item name="Submenu Option 2">
+                                <param name="param2" default="default2" type="str"/>
+                                <help>Performs an action with param2.</help>
+                            </item>
+                        </submenu>
+                    </menu>
+                </submenu>
+            </menu>
+            <item name="Open File">
+                <param name="file" default="default.txt" type="str"/>
+                <param name="mode" default="r" type="str"/>
+                <help>Opens a file with the given name and mode.</help>
+            </item>
+            <item name="Save File">
+                <param name="file" default="output.txt" type="str"/>
+                <help>Saves the file with the given name.</help>
+            </item>
+        </submenu>
+    </item>
+    <item name="Settings">
+        <help>Settings for the application.</help>
+        <submenu>
+            <item name="Perform Dummy Action">
+                <param name="param1" default="default1" type="str"/>
+                <param name="param2" default="default2" type="str"/>
+                <help>Performs a dummy action with two parameters.</help>
+            </item>
+            <item name="Data Types Example">
+                <help>Examples of different data types.</help>
+                <param name="integer_param" default="10" type="int"/>
+                <param name="float_param" default="10.5" type="float"/>
+                <param name="boolean_param" default="true" type="bool"/>
+                <param name="list_param" default="[1, 2, 3]" type="list"/>
+                <param name="map_param" default="{&quot;key1&quot;: &quot;value1&quot;, &quot;key2&quot;: &quot;value2&quot;}" type="map"/>
+                <help>Demonstrates the use of integer, float, boolean, list, and map data types.</help>
+            </item>
+        </submenu>
+    </item>
+</menu>
