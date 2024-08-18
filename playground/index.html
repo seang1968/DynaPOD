@@ -1,0 +1,89 @@
+
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>My AWS S3 Website</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+                        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+                    </style>
+                </head>
+                <body>
+                <p>To add the <code>md_aws_bucket.py</code> script to the menu system under a "Ready Jobs" menu with a "Citi" submenu, and to configure it to use the default clipboard source, you'll need to make the following changes:</p>
+<h3>1. <strong>Update the XML Configuration (<code>menu_config.xml</code>):</strong></h3>
+<p>Add a new menu section for "Ready Jobs" with a "Citi" submenu, and include an item to run the <code>md_aws_bucket.py</code> job with default parameters.</p>
+<h4>Updated <code>menu_config.xml</code>:</h4>
+<p>```xml</p>
+<menu name="Main Menu">
+    <help>Main Menu of the application.</help>
+    <!-- Existing menu items here... -->
+
+    <!-- New "Ready Jobs" menu -->
+    <menu name="Ready Jobs">
+        <help>Preconfigured jobs ready to be executed.</help>
+        <submenu>
+            <!-- "Citi" submenu under "Ready Jobs" -->
+            <menu name="Citi">
+                <help>Jobs under Citi category.</help>
+                <submenu>
+                    <item name="Run Citi AWS Bucket Job">
+                        <param name="md_source" default="clipboard" type="str"/>
+                        <param name="bucket_name" default="sean-site-bucket" type="str"/>
+                        <help>Runs the Markdown to S3 job with the default clipboard source.</help>
+                    </item>
+                </submenu>
+            </menu>
+        </submenu>
+    </menu>
+</menu>
+<p>```</p>
+<h3>2. <strong>Modify <code>action_handler.py</code>:</strong></h3>
+<p>Add a new method in <code>ActionHandler</code> to handle the execution of the <code>md_aws_bucket.py</code> job.</p>
+<h4>Updated <code>action_handler.py</code>:</h4>
+<p>```python
+from md_aws_bucket import MarkdownS3Processor  # Import the MarkdownS3Processor class</p>
+<p>class ActionHandler:
+    def <strong>init</strong>(self):
+        pass  # Constructor can be used to initialize any required state</p>
+<pre><code># Existing methods...
+
+def run_citi_aws_bucket_job(self, md_source="clipboard", bucket_name="sean-site-bucket"):
+    # Create an instance of MarkdownS3Processor with the given parameters
+    processor = MarkdownS3Processor(md_source=md_source, bucket_name=bucket_name)
+    processor.test_proess_clipboard()  # Run the process using clipboard by default
+</code></pre>
+<p>```</p>
+<h3>3. <strong>Modify <code>operation_manager.py</code>:</strong></h3>
+<p>Ensure that <code>OperationManager</code> can recognize and execute the <code>run_citi_aws_bucket_job</code> method.</p>
+<h4>Updated <code>operation_manager.py</code>:</h4>
+<p>```python
+from action_handler import ActionHandler  # Import the ActionHandler class</p>
+<p>class OperationManager:
+    def <strong>init</strong>(self):
+        self.action_handler = ActionHandler()  # Initialize the ActionHandler</p>
+<pre><code># Existing methods...
+
+def execute_operation(self, operation_name, params):
+    method_name = operation_name.replace(' ', '_').lower()
+    if hasattr(self.action_handler, method_name):
+        method = getattr(self.action_handler, method_name)
+        method(**params)  # Call the method on the ActionHandler with the parameters
+    elif hasattr(self, method_name):
+        method = getattr(self, method_name)
+        method(**params)  # Call the method in OperationManager with the parameters
+    else:
+        print(f"Operation '{operation_name}' is not implemented.")
+</code></pre>
+<p>```</p>
+<h3>4. <strong>No Changes Required to Other Files:</strong></h3>
+<p>The <code>menu_parser.py</code>, <code>menu_manager.py</code>, and <code>main.py</code> files do not require modifications for this change to work.</p>
+<h3>Summary of Changes:</h3>
+<ul>
+<li><strong>Updated <code>menu_config.xml</code>:</strong> Added the "Ready Jobs" menu with a "Citi" submenu and configured the job.</li>
+<li><strong>Updated <code>action_handler.py</code>:</strong> Added a method to run the <code>md_aws_bucket.py</code> job with the default clipboard.</li>
+<li><strong>Updated <code>operation_manager.py</code>:</strong> Ensured the new method is recognized and executed.</li>
+</ul>
+<p>These changes will allow the job to be selected and executed from the menu system, with the default parameter values provided directly from the menu.</p></body></html>
