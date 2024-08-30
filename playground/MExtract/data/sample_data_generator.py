@@ -19,7 +19,7 @@ columns = [
 
 def generate_csv(columns, num_rows=100):
     data = {col: [f"SampleData_{i}" for i in range(num_rows)] for col in columns}
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(data)au
     df.to_csv("Monthly_ESX_GUEST_REPORT_v2_JUL_2024.csv", index=False)
 
 if __name__ == "__main__":
