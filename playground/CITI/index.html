@@ -1,92 +1,54 @@
 
-                <!DOCTYPE html>
-                <html lang='en'>
-                <head>
-                    <meta charset='UTF-8'>
-                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                    <title>My AWS S3 Website</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; }
-                        pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-                        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
-                    </style>
-                </head>
-                <body>
-                <p>It looks like the Markdown-to-HTML conversion is not handling code blocks or line breaks as expected. Let's address this by ensuring that the Markdown content is properly formatted before conversion, and that the conversion process itself handles code blocks correctly.</p>
-<h3>Markdown Code Block Formatting</h3>
-<p>To ensure that code blocks are properly converted to HTML, you should use "fenced code blocks" in your Markdown. Fenced code blocks are created by wrapping the code with triple backticks (```) or tildes (~~~).</p>
-<h3>Example Markdown Code Block:</h3>
-<p><code>markdown</code>python
-def test_process_clipboard(self):
-    md_content = ""
-    if self.md_source.lower() == "clipboard":
-        try:
-            md_content = pyperclip.paste()
-            if not md_content.strip():
-                raise ValueError("No content found in clipboard.")
-            print("Markdown content read from clipboard.")
-            print(md_content)
-        except Exception as e:
-            print(f"Error reading from clipboard: {e}")
-            return False</p>
-<pre><code># Convert the Markdown content to HTML
-if not self.convert_md_to_html(md_content):
-    return False
-
-# Upload the HTML file to the specified S3 bucket
-if not self.upload_html_to_s3():
-    return False
-
-return True
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Code Snippet</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 5px; overflow-x: auto; }
+                    code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+                </style>
+            </head>
+            <body>
+            <pre><code>import os
+
+# Base directory where the structure will be created
+#base_dir = "I:/cygwin64/home/sg22321/0NewCode"
+base_dir = "."
+# Directory structure and files to be created
+structure = {
+    "config": ["config.xml"],
+    "data": [],
+    "database": ["db_helpers.py", "sqlite_manager.py", "__init__.py"],
+    "helper": [
+        "constants_singleton.py", "gvar_singleton.py", "logging_singleton.py",
+        "timer_singleton.py", "__init__.py"
+    ],
+    "logs": ["etl.log"],
+    "processing": ["data_cleaner.py", "data_transformer.py", "etl_manager.py", "__init__.py"],
+    "scripts": ["run_etl.py", "__init__.py"],
+    "tests": [
+        "test_data_cleaner.py", "test_logging_singleton.py", 
+        "test_timer_singleton.py", "__init__.py"
+    ]
+}
+
+# Function to create directories and files
+def create_structure(base_dir, structure):
+    for folder, files in structure.items():
+        folder_path = os.path.join(base_dir, folder)
+        os.makedirs(folder_path, exist_ok=True)
+        for file in files:
+            file_path = os.path.join(folder_path, file)
+            # Create an empty file
+            with open(file_path, 'w') as f:
+                pass
+            print(f"Created {file_path}")
+
+# Run the function to create the structure
+create_structure(base_dir, structure)
 </code></pre>
-<p><code></code></p>
-<h3>Improved HTML Conversion</h3>
-<p>To improve the HTML output, you can consider using custom CSS to style the code blocks and other elements, making the content more readable.</p>
-<h3>Updated <code>convert_md_to_html</code> Method with Basic Styling:</h3>
-<p>```python
-def convert_md_to_html(self, md_content):
-    """Convert Markdown content to an HTML file."""
-    try:
-        # Convert Markdown to HTML
-        html_content = markdown.markdown(md_content)</p>
-<pre><code>    # Save the HTML to a file with basic styling for code blocks
-    with open(self.html_file_path, 'w', encoding='utf-8') as html_file:
-        html_file.write("""
-        &lt;!DOCTYPE html&gt;
-        &lt;html lang='en'&gt;
-        &lt;head&gt;
-            &lt;meta charset='UTF-8'&gt;
-            &lt;meta name='viewport' content='width=device-width, initial-scale=1.0'&gt;
-            &lt;title&gt;My AWS S3 Website&lt;/title&gt;
-            &lt;style&gt;
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-                code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
-            &lt;/style&gt;
-        &lt;/head&gt;
-        &lt;body&gt;
-        """)
-        html_file.write(html_content)
-        html_file.write("&lt;/body&gt;&lt;/html&gt;")
-
-    print(f"Successfully generated {self.html_file_path} from Markdown content")
-    return True
-
-except Exception as e:
-    print(f"Error converting Markdown to HTML: {e}")
-    return False
-</code></pre>
-<p>```</p>
-<h3>Explanation:</h3>
-<ul>
-<li><strong>Fenced Code Blocks</strong>: Ensure that the Markdown content uses fenced code blocks (```) for any code you want to display in a block.</li>
-<li><strong>Custom CSS</strong>: The CSS in the <code>style</code> tag within the <code>convert_md_to_html</code> method adds basic styling to code blocks and the overall page. The <code>pre</code> tag is used for code blocks, and <code>code</code> is used for inline code.</li>
-<li><strong>Line Breaks</strong>: Markdown should handle line breaks automatically in code blocks when using fenced code blocks.</li>
-</ul>
-<h3>Next Steps:</h3>
-<ol>
-<li><strong>Ensure your Markdown uses proper fenced code blocks</strong> for any code sections.</li>
-<li><strong>Update your Python script</strong> with the improved <code>convert_md_to_html</code> method to include basic styling.</li>
-<li><strong>Run the script again</strong> to see if the HTML output is now properly formatted.</li>
-</ol>
-<p>If this approach doesn’t fully resolve the issue, we can explore additional options like using a different Markdown converter or applying more advanced styling. Let me know how it goes!</p></body></html>
+            </body></html>
+            

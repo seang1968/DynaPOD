@@ -1,0 +1,14 @@
+<config>
+    <!-- Other settings -->
+    <setting name="log_file_max_bytes" value="10485760" type="integer"/>
+    <setting name="log_dir_name" value="logs" type="string"/>
+    <setting name="logger_name" value="MyLogger" type="string"/>
+    <setting name="log_gen_level" value="DEBUG" type="string"/>
+    <setting name="log_file_name" value="application.log" type="string"/>
+    <setting name="log_file_max_bytes" value="1048576" type="integer"/> <!-- 1 MB -->
+    <setting name="log_file_backup_count" value="5" type="integer"/> <!-- Keep 5 backup files -->
+    <setting name="log_file_level" value="DEBUG" type="string"/>
+    <setting name="log_stream_level" value="INFO" type="string"/>
+    <setting name="logfile_file_format" value="%(asctime)s - %(name)s - %(levelname)s - %(message)s" type="string"/>
+    <setting name="logstream_format" value="%(name)s - %(levelname)s - %(message)s" type="string"/>
+</config>
