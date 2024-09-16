@@ -1,0 +1,29 @@
+Database File Path: .\configurations.db
+Database Configuration and Information
+====================================
+
+Database File: <sqlite3.Connection object at 0x0000015B121E2540>
+SQLite Version: 2.6.0
+
+Tables:
+-------
+Table: Coins
+Columns:
+  id (INTEGER)
+  coin_name (TEXT)
+
+Table: sqlite_sequence
+Columns:
+  name ()
+  seq ()
+
+Table: Channels
+Columns:
+  id (INTEGER)
+  channel_name (TEXT)
+
+Table: Markets
+Columns:
+  id (INTEGER)
+  market_name (TEXT)
+
