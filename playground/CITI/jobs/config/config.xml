@@ -1,0 +1,40 @@
+<configuration>
+    <resources>
+        <resource name="DataFolder" type="folder">
+            <path>./data</path>  <!-- This is the folder path -->
+        </resource>
+        <resource name="LogFolder" type="folder">
+            <path>./logs</path>  <!-- This is the folder path -->
+        </resource>
+        <resource name="DatabaseConnection" type="sqlite">
+            <path>db.sqlite</path>
+        </resource>
+        <resource name="LogFile" type="file">
+            <path>app.log</path>
+            <max_bytes>1048576</max_bytes>  <!-- 1 MB -->
+            <backup_count>5</backup_count>  <!-- Number of backups -->
+             <file_log_level>DEBUG</file_log_level>   <!-- Log level for file -->
+             <console_log_level>INFO</console_log_level>   <!-- Log level for console -->
+        </resource>
+        <resource name="Year" type="year">
+            <value>2024</value>  <!-- Set the year -->
+        </resource>
+        <resource name="Month" type="month">
+            <value>jan</value>  <!-- Set the month (short format) -->
+        </resource>
+
+    </resources>
+    <actions>
+        <action name="Action1">
+            <operation>ProcessData</operation>
+            <parameters>
+                <param name="InputFile" value="data.csv" />
+            </parameters>
+        </action>
+        <actions>
+            <action name="NestedAction">
+                <operation>Backup</operation>
+            </action>
+        </actions>
+    </actions>
+</configuration>
